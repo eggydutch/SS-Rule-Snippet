@@ -15,7 +15,7 @@ socks-port: 7891
 # redir-port: 7892
 
 # 允许局域网的连接（可用来共享代理）
-allow-lan: false
+allow-lan: true
 
 # 规则模式：Rule（规则） / Global（全局代理）/ Direct（全局直连）
 mode: Rule
@@ -57,16 +57,16 @@ dns:
   #   'alpha.clash.dev': '::1'
 
   nameserver:
-     - 1.2.4.8
-     - 114.114.114.114
+     - 119.29.29.29
+     - 180.76.76.76
      - 223.5.5.5
      - tls://dns.rubyfish.cn:853
      #- https://dns.rubyfish.cn/dns-query
      
   fallback: # 与 nameserver 内的服务器列表同时发起请求，当规则符合 GEOIP 在 CN 以外时，fallback 列表内的域名服务器生效。
-     - tls://dns.rubyfish.cn:853
-     - tls://1.0.0.1:853
      - tls://dns.google:853
+     - tls://1.1.1.1:853
+     - tls://dns.adguard.com:853
 
      #- https://dns.rubyfish.cn/dns-query
      #- https://cloudflare-dns.com/dns-query
@@ -105,34 +105,22 @@ Proxy:
 #   rc4-md5 chacha20 chacha20-ietf xchacha20
 #   chacha20-ietf-poly1305 xchacha20-ietf-poly1305
 
-- { name: "ss1", type: ss, server: server, port: 443, cipher: chacha20-ietf-poly1305, password: "password", udp: true }
+- { name: "eggy", type: vmess, server: www.eggypupuf2.ga, port: 443, uuid: 6d83b598-7d38-4502-d41f-ae26d8b6a37a, alterId: 64, cipher: aes-128-gcm, network: ws, ws-path: /eggy, tls: true }
 
-- name: "ss2"
-  type: ss
-  server: server
+- name: "eggy"
+  type: vmess
+  server: www.eggypupuf2.ga
   port: 443
-  cipher: AEAD_CHACHA20_POLY1305
-  password: "password"
-  plugin: obfs
-  plugin-opts:
-    mode: tls # 混淆模式，可以选择 http 或 tls
-    host: bing.com # 混淆域名，需要和服务器配置保持一致
-
-- name: "ss3"
-  type: ss
-  server: server
-  port: 443
-  cipher: AEAD_CHACHA20_POLY1305
-  password: "password"
-  plugin: v2ray-plugin
-  plugin-opts:
-    mode: websocket # 暂时不支持 QUIC 协议
-    # tls: true # wss
-    # skip-cert-verify: true
-    # host: bing.com
-    # path: "/"
-    # headers:
-    #   custom: value
+  cipher: aes-128-gcm
+  uuid: ac8dba07-88e8-4d56-ad48-ab97519d7469
+  alterId: 64
+  cipher: auto
+  network: ws
+  ws-path: /eggy
+  ws-headers:
+  Host: www.eggypupuf2.ga
+  tls: true
+  skip-cert-verify: true
 
 # vmess
 # 支持加密方式：auto / aes-128-gcm / chacha20-poly1305 / none
@@ -167,17 +155,17 @@ Proxy:
 
 Proxy Group:
 # url-test 可以自动选择与指定 URL 测速后，延迟最短的服务器
-- { name: "auto", type: url-test, proxies: ["ss1", "ss2", "vmess1"], url: "https://www.bing.com", interval: 300 }
+#- { name: "auto", type: url-test, proxies: ["eggy"], url: "https://www.bing.com", interval: 300 }
 
 # fallback 可以尽量按照用户书写的服务器顺序，在确保服务器可用的情况下，自动选择服务器
-- { name: "fallback-auto", type: fallback, proxies: ["ss1", "ss2", "vmess1"], url: "https://www.bing.com", interval: 300 }
+- { name: "fallback-auto", type: fallback, proxies: ["eggy"], url: "https://www.bing.com", interval: 300 }
 
 # load-balance 可以使相同 eTLD 请求在同一条代理线路上
-- { name: "load-balance", type: load-balance, proxies: ["ss1", "ss2", "vmess1"] }
+#- { name: "load-balance", type: load-balance, proxies: ["ss1", "ss2", "vmess1"] }
 
 # select 用来允许用户手动选择 代理服务器 或 服务器组
 # 您也可以使用 RESTful API 去切换服务器，这种方式推荐在 GUI 中使用
-- { name: "Proxy", type: select, proxies: ["ss1", "ss2", "vmess1", "auto"] }
+#- { name: "Proxy", type: select, proxies: ["ss1", "ss2", "vmess1", "auto"] }
 
 Rule:
 # Apple
@@ -439,6 +427,7 @@ Rule:
 - DOMAIN-SUFFIX,duckduckgo.com,Proxy
 - DOMAIN-SUFFIX,dueapp.com,Proxy
 - DOMAIN-SUFFIX,dytt8.net,Proxy
+- DOMAIN-SUFFIX,eprice.com.hk,Proxy
 - DOMAIN-SUFFIX,edgecastcdn.net,Proxy
 - DOMAIN-SUFFIX,edgekey.net,Proxy
 - DOMAIN-SUFFIX,edgesuite.net,Proxy
