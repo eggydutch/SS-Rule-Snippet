@@ -105,20 +105,20 @@ Proxy:
 #   rc4-md5 chacha20 chacha20-ietf xchacha20
 #   chacha20-ietf-poly1305 xchacha20-ietf-poly1305
 
-- { name: "eggy", type: vmess, server: www.eggypupuf2.ga, port: 443, uuid: 6d83b598-7d38-4502-d41f-ae26d8b6a37a, alterId: 64, cipher: aes-128-gcm, network: ws, ws-path: /eggy, tls: true }
+- { name: "eggy", type: vmess, server: www.123.com, port: 443, uuid: 2039029309203920392032, alterId: 64, cipher: aes-128-gcm, network: ws, ws-path: /123, tls: true }
 
 - name: "eggy"
   type: vmess
-  server: www.eggypupuf2.ga
+  server: www.123.com
   port: 443
   cipher: aes-128-gcm
-  uuid: ac8dba07-88e8-4d56-ad48-ab97519d7469
+  uuid: 2039029309203920392032
   alterId: 64
   cipher: auto
   network: ws
   ws-path: /eggy
   ws-headers:
-  Host: www.eggypupuf2.ga
+  Host: www.123.com
   tls: true
   skip-cert-verify: true
 
